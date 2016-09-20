@@ -785,10 +785,22 @@ export default function init(inPublicAPI, inModel) {
         .attr('rx', 8)
         .attr('ry', 8);
       uncertRegions
-        .attr('x', d => def.xScale(d.value - (d.uncertainty * (hobj.max - hobj.min))))
+        .attr('x', d => {
+          const sval = def.xScale(d.value - (d.uncertainty * (hobj.max - hobj.min)));
+          if (isNaN(sval)) {
+            return 0;
+          }
+          return sval;
+        })
         .attr('y', 0)
         // to get a width, need to start from 'zero' of this scale, which is hobj.min
-        .attr('width', (d, i) => def.xScale(hobj.min + (2 * d.uncertainty * (hobj.max - hobj.min))))
+        .attr('width', (d, i) => {
+          const sval = def.xScale(hobj.min + (2 * d.uncertainty * (hobj.max - hobj.min)));
+          if (isNaN(sval)) {
+            return 0;
+          }
+          return sval;
+        })
         .attr('height', () => model.histHeight)
         .attr('fill', '#000')
         .attr('opacity', (d) => (d.uncertainty > 0 ? '0.2' : '0'));
