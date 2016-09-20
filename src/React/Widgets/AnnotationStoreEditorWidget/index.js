@@ -37,12 +37,12 @@ export default function annotationStoreEditorWidget(props) {
     if (storedSelectedAnnotation.generation === props.annotation.generation) {
       buttons.push(button('Delete', storeAction('delete')));
     } else {
-      buttons.push(button('Save', storeAction('new')));
+      buttons.push(button('Save New', storeAction('new')));
       buttons.push(button('Revert', storeAction('reset')));
       buttons.push(button('Update', storeAction('save')));
     }
   } else if (props.annotation && props.annotation.selection.type !== 'empty') {
-    buttons.push(button('Save', storeAction('new')));
+    buttons.push(button('Save New', storeAction('new')));
   }
 
   return (
