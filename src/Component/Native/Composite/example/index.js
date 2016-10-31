@@ -10,10 +10,10 @@ container.style.width = '100%';
 container.style.height = '600px';
 
 const composite = new CompositeComponent();
-const green = new BGColorComponent('green');
-const red = new BGColorComponent('red');
-const blue = new BGColorComponent('blue');
-const pink = new BGColorComponent('pink');
+const green = new BGColorComponent({ color:'green' });
+const red   = new BGColorComponent({ color:'red' });
+const blue  = new BGColorComponent({ color:'blue' });
+const pink  = new BGColorComponent({ color:'pink' });
 
 composite.addViewport(green);
 composite.addViewport(red);

@@ -1,36 +1,77 @@
-/* eslint-disable class-methods-use-this */
+import d3 from 'd3';
 
-export default class NativeBackgroundColorComponent {
-  constructor(color, el) {
-    this.color = color;
-    this.setContainer(el);
-    this.previousColor = '';
-  }
+import style from 'PVWStyle/ComponentNative/BackgroundColor.mcss';
+import htmlContent from './body.html';
+import CompositeClosureHelper from '../../../Common/Core/CompositeClosureHelper';
 
-  /*
-   * We must not mess with the position properties of the style on the container
-   * we are given, or we will break the workbench layout functionality!  Setting the
-   * background color is fine, however, as long as we don't use the setAttribute()
-   * approach to this.  Also, we could always create our own container
-   * within the element we are given, and we can do whatever we want with that.
-   */
-
-  setContainer(el) {
-    if (this.el) {
-      this.el.style['background-color'] = this.previousColor;
+function backgroundColorComponent(publicAPI, model) {
+  publicAPI.resize = () => {
+    if (!model.container) {
+      return;
     }
 
-    this.el = el;
+    model.clientRect = model.container.getBoundingClientRect();
+  };
 
-    if (el) {
-      this.previousColor = this.el.style['background-color'];
-      this.el.style['background-color'] = this.color;
+  publicAPI.setContainer = (el) => {
+    if (model.container) {
+      while (model.container.firstChild) {
+        model.container.removeChild(model.container.firstChild);
+      }
     }
-  }
 
-  render() {}
+    model.container = el;
 
-  resize() {}
+    if (model.container) {
+      // Create placeholder
+      model.container.innerHTML = htmlContent;
 
-  destroy() {}
+      // Apply style
+      d3
+        .select(model.container)
+        .select('.bg-color-container')
+        .classed(style.bgcolorContainer, true)
+        .style('background-color', model.color);
+    }
+  };
+
+  publicAPI.setColor = (colorSpec) => {
+    let color = colorSpec;
+    if (typeof colorSpec !== 'string' || colorSpec === '') {
+      color = 'inherit';
+    }
+    model.color = color;
+    if (model.container) {
+      d3.select(model.container).select('.bg-color-container').style('background-color', model.color);
+    }
+  };
 }
+
+// ----------------------------------------------------------------------------
+// Object factory
+// ----------------------------------------------------------------------------
+
+const DEFAULT_VALUES = {
+  container: null,
+  color: 'inherit',
+};
+
+// ----------------------------------------------------------------------------
+
+export function extend(publicAPI, model, initialValues = {}) {
+  Object.assign(model, DEFAULT_VALUES, initialValues);
+
+  CompositeClosureHelper.destroy(publicAPI, model);
+  CompositeClosureHelper.isA(publicAPI, model, 'VizComponent');
+  CompositeClosureHelper.get(publicAPI, model, ['color', 'container']);
+
+  backgroundColorComponent(publicAPI, model);
+}
+
+// ----------------------------------------------------------------------------
+
+export const newInstance = CompositeClosureHelper.newInstance(extend);
+
+// ----------------------------------------------------------------------------
+
+export default { newInstance, extend };
