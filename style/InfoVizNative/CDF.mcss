@@ -1,0 +1,41 @@
+.cdfContainer {
+  font-family: "Optima", "Linux Biolinum", "URW Classico", sans;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.transformGroup {
+  fill: none;
+}
+
+.quantile {
+  fill: #bbb;
+  stroke: black;
+  stroke-width: 2;
+}
+
+.emphasizedNode {
+  fill: black !important;
+  stroke: black !important;
+  stroke-width: 0.007 !important;
+}
+
+.highlightedNode {
+  fill: #aaa;
+}
+
+.hyperbolicTreeEdge {
+  stroke: #aaa;
+  fill: none;
+  stroke-width: 0.005;
+}
+
+.hyperbolicDiskBoundary {
+  fill: none;
+  stroke: black;
+  stroke-width: 0.005;
+}
