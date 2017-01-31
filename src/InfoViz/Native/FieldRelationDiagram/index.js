@@ -5,6 +5,9 @@ import htmlContent from './body.html';
 // import FieldInformationProvider from '../../../InfoViz/Core/FieldInformationProvider';
 import CompositeClosureHelper from '../../../Common/Core/CompositeClosureHelper';
 
+import taylorIcon             from './svg/taylor-gnomon.svg';
+import smiIcon                from './svg/smi-gnomon.svg';
+
 function fieldRelationEdgeBundle(publicAPI, model) {
   function interpolateTheta(node, t) {
     const nextTheta = model.theta[model.focus][node.id];
@@ -77,6 +80,18 @@ function fieldRelationEdgeBundle(publicAPI, model) {
       const viewdiv = d3.select(model.container).select('.field-relation-container');
       viewdiv.classed(style.fieldRelationContainer, true);
       const svg = viewdiv.append('svg').classed('field-relation-svg', true);
+
+      model.axisLabelsGroup = svg.append('g').classed('axes-labelling', true);
+      model.radialAxisIcon = model.axisLabelsGroup.append('svg');
+      model.radialAxisIcon.append('use')
+        .attr('xlink:href', (model.diagramType.toLowerCase() === 'taylor' ? taylorIcon : smiIcon));
+
+      model.radialAxisIcon.classed(`${style.axisLabelSvg}`, true)
+        .attr('width', `${model.axisLabelSize}`)
+        .attr('height', `${model.axisLabelSize}`);
+
+      model.axisLabelsGroup.attr('transform', 'translate(20, -20)');
+
       model.transformGroup = svg.append('g').classed('disk-transform', true);
       model.axesGroup = model.transformGroup.append('g');
       model.axesGroup.append('path')
@@ -311,6 +326,7 @@ const DEFAULT_VALUES = {
   focus: -1,
   prevFocus: -1,
   legendSize: 12,
+  axisLabelSize: 130,
   transitionTime: 1500,
 };
 
