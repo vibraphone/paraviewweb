@@ -17,20 +17,20 @@
 }
 
 .selectedGlyph {
-  stroke: #66b;
-  stroke-width: 2px;
+  stroke: #666;
+  stroke-width: 3px;
 }
 
 .emphasizedNode {
   fill: black;
   stroke: black;
-  stroke-width: 3px;
+  stroke-width: 4px;
 }
 
 .emphasizedGlyph {
   composes: selectedGlyph;
   stroke: black;
-  stroke-width: 3px;
+  stroke-width: 4px;
 }
 
 .highlightedNode {
@@ -40,7 +40,7 @@
 .highlightedGlyph {
   composes: selectedGlyph;
   stroke: #999;
-  stroke-width: 3px;
+  stroke-width: 4px;
 }
 
 .fieldRelationTreeEdge {
