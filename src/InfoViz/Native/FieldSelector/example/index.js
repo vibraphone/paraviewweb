@@ -15,7 +15,7 @@ import Workbench from '../../../../Component/Native/Workbench';
 
 import FieldSelector from '../../../Native/FieldSelector';
 
-import dataModel from '../../HistogramSelector/example/state.json';
+import dataModel from './state.json';
 
 const container = document.querySelector('.content');
 container.style.height = '100vh';
@@ -40,16 +40,18 @@ provider.assignLegend(['colors', 'shapes']);
 
 // Create field selector
 const fieldSelector = FieldSelector.newInstance({ provider });
-const fieldSelectorB = FieldSelector.newInstance({ provider, displayOnlyUnselected: true });
+const fieldSelectorB = FieldSelector.newInstance({ provider, display: 'selected', fieldShowHistogram: false });
 
 const viewports = {
   FieldSelectorA: {
     component: fieldSelector,
     viewport: 0,
+    scroll: true,
   },
   FieldSelectorB: {
     component: fieldSelectorB,
     viewport: 1,
+    scroll: true,
   },
 };
 
@@ -58,6 +60,7 @@ workbench.setComponents(viewports);
 workbench.setLayout('2x1');
 
 workbench.setContainer(container);
+workbench.setCenter(0.67, 0.5);
 
 // Listen to window resize
 sizeHelper.onSizeChange(() => {
@@ -66,3 +69,4 @@ sizeHelper.onSizeChange(() => {
 sizeHelper.startListening();
 
 sizeHelper.triggerChange();
+

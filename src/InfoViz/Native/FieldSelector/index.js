@@ -47,7 +47,7 @@ function fieldSelector(publicAPI, model) {
 
     if (el) {
       model.innerDiv = model.container;
-      const table = d3.select(model.container).append('table').classed(style.fieldSelector, true);
+      const table = d3.select(model.innerDiv).append('table').classed(style.fieldSelector, true);
       const theadRow = table.append('thead').classed(style.thead, true).append('tr');
       theadRow.append('th').classed(style.jsFieldSelectorMode, true).append('i');
       const thLabel = theadRow.append('th').classed('field-selector-label', true);
@@ -172,7 +172,7 @@ function fieldSelector(publicAPI, model) {
     };
 
     // Apply style
-    d3.select(`.${style.jsFieldSelectorMode}`)
+    d3.select(model.innerDiv).select(`.${style.jsFieldSelectorMode}`)
       .on('click', displayClick)
       .select('i')
       // apply class - 'false' should come first to not remove common base class.
@@ -237,7 +237,7 @@ function fieldSelector(publicAPI, model) {
         }
       }
     }
-    const header = d3.select(`.${style.jsTHead}`).select('tr');
+    const header = d3.select(model.innerDiv).select(`.${style.jsTHead}`).select('tr');
     header.selectAll(`.${style.jsHistMin}`)
       .style('display', hideField.minMax ? 'none' : null);
     const chartHeader = header.selectAll(`.${style.jsSparkline}`)
@@ -269,7 +269,7 @@ function fieldSelector(publicAPI, model) {
     }
 
     // Handle variables
-    const variablesContainer = d3
+    const variablesContainer = d3.select(model.innerDiv)
       .select(`.${style.jsTBody}`)
       .selectAll('tr')
       .data(data);
@@ -516,10 +516,10 @@ function fieldSelector(publicAPI, model) {
   };
 
   function handleHoverUpdate(data) {
-    const svg = d3.select(model.innerDiv);
+    const container = d3.select(model.innerDiv);
     Object.keys(data.state).forEach((pName) => {
       const binList = data.state[pName];
-      svg.selectAll(`rect[pname='${pName}']`)
+      container.selectAll(`rect[pname='${pName}']`)
         .classed(style.histoHilite, (d, i) => binList.indexOf(-1) === -1)
         .classed(style.binHilite, (d, i) => binList.indexOf(i) >= 0);
     });
@@ -558,7 +558,7 @@ function fieldSelector(publicAPI, model) {
   if (model.provider.isA('FieldHoverProvider')) {
     model.subscriptions.push(
       model.provider.onHoverFieldChange((hover) => {
-        d3.select(`.${style.jsTBody}`)
+        d3.select(model.innerDiv).select(`.${style.jsTBody}`)
           .selectAll('tr')
           .classed(style.highlightedRow, d => d.name in hover.state.highlight);
       }));
