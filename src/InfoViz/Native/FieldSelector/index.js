@@ -22,6 +22,51 @@ function fieldSelector(publicAPI, model) {
     minMaxWidth: 0,
     histWidth: 0,
   };
+  // Data for display icons. 'all' displays two overlaid icons, others show one icon.
+  const modeIcons = {
+    'all': [
+      {
+        top: '-3px',
+        left: '-4px',
+        className: style.allFieldsIcon,
+        display: null,
+      },
+      {
+        top: '3px',
+        left: '4px',
+        className: style.selectedFieldsIcon,
+        display: null,
+      },
+    ],
+    'selected': [
+      {
+        top: '-3px',
+        left: '-4px',
+        className: style.allFieldsIcon,
+        display: 'none',
+      },
+      {
+        top: '0px',
+        left: '0px',
+        className: style.selectedFieldsIcon,
+        display: null,
+      },
+    ],
+    'unselected': [
+      {
+        top: '0px',
+        left: '0px',
+        className: style.allFieldsIcon,
+        display: null,
+      },
+      {
+        top: '0px',
+        left: '0px',
+        className: style.selectedFieldsIcon,
+        display: 'none',
+      },
+    ],
+  }
 
   // storage for 1d histograms
   if (!model.histograms) {
@@ -49,7 +94,9 @@ function fieldSelector(publicAPI, model) {
       model.innerDiv = model.container;
       const table = d3.select(model.innerDiv).append('table').classed(style.fieldSelector, true);
       const theadRow = table.append('thead').classed(style.thead, true).append('tr');
-      theadRow.append('th').classed(style.jsFieldSelectorMode, true).append('i');
+      const modeSpan = theadRow.append('th').classed(style.fieldSelectorMode, true).append('span');
+      modeSpan.append('i');
+      modeSpan.append('i');
       const thLabel = theadRow.append('th').classed('field-selector-label', true);
       table.append('tbody').classed(style.tbody, true);
       thLabel.append('div').classed(style.jsFieldSelectorLabel, true);
@@ -62,11 +109,11 @@ function fieldSelector(publicAPI, model) {
       model.fieldShowHistogram = model.fieldShowHistogram && (model.provider.isA('Histogram1DProvider'));
       // append headers for histogram columns
       if (model.fieldShowHistogram) {
-        theadRow.append('th').text('Min').classed(style.jsHistMin, true);
+        theadRow.append('th').text('Min').classed(style.histMin, true);
         const chartHeader = theadRow.append('th').classed(style.jsSparkline, true);
         chartHeader.append('span').text('Histogram').classed(style.chartHeader, true);
         chartHeader.append('i');
-        theadRow.append('th').text('Max').classed(style.jsHistMax, true);
+        theadRow.append('th').text('Max').classed(style.histMax, true);
       }
       if (model.showSelectedFirstToggle) {
         const header = d3.select(model.innerDiv).select('thead').append('tr');
@@ -78,7 +125,7 @@ function fieldSelector(publicAPI, model) {
         };
         header
           .append('th').classed(style.jsSelectedFirst, true)
-            .append('i').classed(style.allFieldsIcon, true)
+            .append('i').classed(style.allIcon, true)
               .on('click', selClick);
         header.append('th').classed(style.selectedFirstLabel, true)
           .append('div').classed(style.fieldSelectorHead, true)
@@ -171,13 +218,14 @@ function fieldSelector(publicAPI, model) {
       publicAPI.render();
     };
 
-    // Apply style
+    // Set display-mode icons
     d3.select(model.innerDiv).select(`.${style.jsFieldSelectorMode}`)
       .on('click', displayClick)
-      .select('i')
-      // apply class - 'false' should come first to not remove common base class.
-      .classed(!(model.display === 'all') ? style.allFieldsIcon : style.selectedFieldsIcon, false)
-      .classed((model.display === 'all') ? style.allFieldsIcon : style.selectedFieldsIcon, true);
+      .selectAll('i').data(modeIcons[model.display])
+      .attr('class', d => (d.className))
+      .style('display', d => (d.display))
+      .style('top', d => (d.top))
+      .style('left', d => (d.left));
 
 
     const selectedBool = (model.display === 'selected');
@@ -202,8 +250,8 @@ function fieldSelector(publicAPI, model) {
         .classed(style.fieldSelectorHead, true);
     if (model.showSelectedFirstToggle) {
       d3.select(model.innerDiv).select(`.${style.jsSelectedFirst}`).select('i')
-        .classed(model.displaySelectedFirst ? style.allFieldsIcon : style.selectedFirstIcon, false)
-        .classed(!model.displaySelectedFirst ? style.allFieldsIcon : style.selectedFirstIcon, true)
+        .classed(model.displaySelectedFirst ? style.allIcon : style.selectedIcon, false)
+        .classed(!model.displaySelectedFirst ? style.allIcon : style.selectedIcon, true)
         .classed(style.disabled, model.display !== 'all');
       d3.select(model.innerDiv).selectAll(`.${style.jsSelectedFirst}`)
         .classed(style.disabled, model.display !== 'all');
@@ -356,9 +404,9 @@ function fieldSelector(publicAPI, model) {
         let maxCell = fieldContainer.select(`.${style.jsHistMax}`);
 
         if (histCell.empty()) {
-          minCell = fieldContainer.append('td').classed(style.jsHistMin, true);
+          minCell = fieldContainer.append('td').classed(style.histMin, true);
           histCell = fieldContainer.append('td').classed(style.sparkline, true);
-          maxCell = fieldContainer.append('td').classed(style.jsHistMax, true);
+          maxCell = fieldContainer.append('td').classed(style.histMax, true);
           histCell.append('svg')
             .classed(style.sparklineSvg, true)
             .attr('width', model.fieldHistWidth)

@@ -31,6 +31,11 @@
   opacity: 0.5;
 }
 
+.fieldSelectorMode {
+  composes: jsFieldSelectorMode;
+  composes: fa-stack from 'font-awesome/css/font-awesome.css';
+}
+
 .icon {
   composes: fa    from 'font-awesome/css/font-awesome.css';
   composes: fa-fw from 'font-awesome/css/font-awesome.css';
@@ -38,15 +43,25 @@
   cursor: pointer;
 }
 
-.selectedFieldsIcon, .selectedFirstIcon {
+.selectedIcon {
   composes: icon;
   composes: fa-check-square-o from 'font-awesome/css/font-awesome.css';
 }
-
-.allFieldsIcon {
+.allIcon {
   composes: icon;
   composes: fa-square-o from 'font-awesome/css/font-awesome.css';
 }
+
+.selectedFieldsIcon {
+  composes: selectedIcon;
+  composes: fa-stack-1x from 'font-awesome/css/font-awesome.css';
+}
+
+.allFieldsIcon {
+  composes: allIcon;
+  composes: fa-stack-1x from 'font-awesome/css/font-awesome.css';
+}
+
 
 .selectedFirstLabel {
   composes: jsSelectedFirst;
@@ -63,6 +78,15 @@
 .showBoxIcon {
   composes: showHistIcon;
   opacity: 0.5;
+}
+
+.histMin {
+  composes: jsHistMin;
+  min-width: 2.3rem;
+}
+.histMax {
+  composes: jsHistMax;
+  min-width: 2.3rem;
 }
 
 .legend {

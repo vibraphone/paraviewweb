@@ -39,8 +39,15 @@ provider.getFieldNames().forEach((name) => {
 provider.assignLegend(['colors', 'shapes']);
 
 // Create field selector
-const fieldSelector = FieldSelector.newInstance({ provider });
-const fieldSelectorB = FieldSelector.newInstance({ provider, display: 'selected', fieldShowHistogram: false });
+const fieldSelector = FieldSelector.newInstance({
+  provider,
+  //showSelectedFirstToggle: true,
+});
+const fieldSelectorB = FieldSelector.newInstance({
+  provider,
+  display: 'selected',
+  fieldShowHistogram: false,
+});
 
 const viewports = {
   FieldSelectorA: {
